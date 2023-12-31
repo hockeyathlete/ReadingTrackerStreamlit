@@ -11,6 +11,7 @@ st.text('Use the menu to the left to navigate through the app')
 if "book_data" not in st.session_state:
     status = st.text('Loading Data')
     st.session_state.book_data, st.session_state.log_data = backend.load_data()  # 👈 Download the data
+    status.text('Data loaded')
 
 with st.expander('Click here to view the raw data'):
     st.header('Book Data')
