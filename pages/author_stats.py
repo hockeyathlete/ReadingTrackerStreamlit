@@ -1,7 +1,5 @@
 import streamlit as st
-import backend
 import altair as alt
-import pandas as pd
 
 st.title('Author Stats')
 
