@@ -6,8 +6,8 @@ import pandas as pd
 st.title('Author Stats')
 
 
-def author_chart(data):
-    chart = alt.Chart(data, title='Books by Author').mark_bar().encode(
+def author_chart(author_data):
+    chart = alt.Chart(author_data, title='Books by Author').mark_bar().encode(
         x=alt.X('Author', sort='-y'),
         y=alt.Y('Book Title', title=None)
     )
@@ -15,7 +15,7 @@ def author_chart(data):
     return chart
 
 
-data = backend.books
+data = st.session_state.book_data
 books_read = data[data['Status'] == 'Read']
 author_list = books_read.groupby('Author')['Book Title'].count().sort_values(ascending=False).to_frame().reset_index()
 
