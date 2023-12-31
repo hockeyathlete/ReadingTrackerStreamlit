@@ -49,3 +49,4 @@ books_by_month = year_data.groupby('month_year')['Book Title'].count().sort_valu
 
 st.altair_chart(books_by_month_chart(books_by_month))
 st.header('Genres')
+st.text('Coming soon...')
