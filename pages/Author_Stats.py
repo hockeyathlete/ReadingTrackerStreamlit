@@ -1,9 +1,6 @@
 import streamlit as st
 import altair as alt
 
-st.title('Author Stats')
-
-
 def author_chart(author_data):
     chart = alt.Chart(author_data, title='Books by Author').mark_bar().encode(
         x=alt.X('Author', sort='-y'),
@@ -11,6 +8,9 @@ def author_chart(author_data):
     )
 
     return chart
+
+st.set_page_config(page_title='Reading Tracker- Author Stats')
+st.title('Author Stats')
 
 
 data = st.session_state.book_data

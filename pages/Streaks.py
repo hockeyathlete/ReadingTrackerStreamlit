@@ -25,6 +25,7 @@ for pages in page_counts:
     page_count_log = daily_pages[daily_pages['Pages Read'] > pages]
     streaks[pages] = calculate_longest_streak(page_count_log)
 
+st.set_page_config(page_title='Reading Tracker- Top Streaks')
 st.title('Top Streaks')
 for pages, days in streaks.items():
     st.text(f'Days in a row (>{pages} pages): {days[0]} | {days[1]} | {days[2].strftime("%m/%d/%Y")}')

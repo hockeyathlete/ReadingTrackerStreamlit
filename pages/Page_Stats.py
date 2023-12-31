@@ -29,8 +29,9 @@ def day_of_week_chart(day_of_week_data):
     # chart = base.encode(y='Pages Read')
     return chart
 
-
+st.set_page_config(page_title='Reading Tracker- Page Stats')
 st.title('Page Stats')
+
 with st.expander('How pages are counted across different mediums'):
     st.text('Normalized data means eBooks pages are multiplied by a factor of 0.89 to account \nfor shorter pages')
     st.text('Audiobooks are excluded from this data')

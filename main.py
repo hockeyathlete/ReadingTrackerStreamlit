@@ -1,8 +1,8 @@
 import streamlit as st
 import backend
 
-
-st.title('Book Tracker')
+st.set_page_config(page_title='Reading Tracker- Home')
+st.title('Reading Tracker')
 
 st.text("Welcome to Alan's Reading Tracking App!")
 st.text('Use the menu to the left to navigate through the app')

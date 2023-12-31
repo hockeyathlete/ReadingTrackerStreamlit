@@ -22,6 +22,7 @@ def books_by_month_chart(books_by_month_data):
     return chart
 
 
+st.set_page_config(page_title='Reading Tracker- Book Stats')
 st.title('Book Data')
 # Threshold to be considered a book
 min_pages_per_book = st.number_input('Pick number of pages to set as threshold', 0)
