@@ -1,9 +1,12 @@
 import pandas as pd
 
 
-def load_data():
+def load_data(user):
     # Load Data
-    sheet_id = '1lQQliuMCJPLcfn3CzaK4aU6-Ro3wkMJ1Ghqa8vdJ1ho'
+    if user == 'Alan':
+        sheet_id = '1lQQliuMCJPLcfn3CzaK4aU6-Ro3wkMJ1Ghqa8vdJ1ho'
+    elif user == 'Michaels':
+        sheet_id = '1P6fvMYKev5RS_M3ClTb-KiLPU-HOKplO-3grupqCdNI'
     book_tracker = 'Book%20Tracker'
     book_tracker_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={book_tracker}'
     reading_log = 'Reading%20Log'

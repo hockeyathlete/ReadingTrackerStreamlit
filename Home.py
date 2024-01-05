@@ -7,10 +7,13 @@ st.title('Reading Tracker')
 st.text("Welcome to Alan's Reading Tracking App!")
 st.text('Use the menu to the left to navigate through the app')
 
+users = ['Alan', 'Michaels']
+selected_user = st.selectbox('View stats for:', users)
 
-if "book_data" not in st.session_state:
+
+if "book_data" not in st.session_state or st.button('Confirm User'):
     status = st.text('Loading Data')
-    st.session_state.book_data, st.session_state.log_data = backend.load_data()  # 👈 Download the data
+    st.session_state.book_data, st.session_state.log_data = backend.load_data(selected_user)  # 👈 Download the data
     status.text('Data loaded')
 
 with st.expander('Click here to view the raw data'):
