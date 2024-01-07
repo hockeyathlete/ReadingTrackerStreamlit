@@ -1,6 +1,8 @@
 import streamlit as st
 from datetime import timedelta, date
 
+st.set_page_config(page_title='Reading Tracker- Top Streaks')
+
 
 def calculate_longest_streak(daily_log):
     '''this function is modified from https://joshdevlin.com/blog/calculate-streaks-in-pandas/'''
@@ -14,7 +16,7 @@ def calculate_longest_streak(daily_log):
         active = 'Active'
     else:
         active = 'Not Active'
-    return best_streak, active, active_date
+    return best_streak, active, active_date.strftime("%m/%d/%Y")
 
 
 daily_pages = st.session_state.log_data.groupby('Date', as_index=False)['Pages Read'].sum()
@@ -23,9 +25,11 @@ days = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 streaks = dict(zip(page_counts, days))
 for pages in page_counts:
     page_count_log = daily_pages[daily_pages['Pages Read'] > pages]
-    streaks[pages] = calculate_longest_streak(page_count_log)
+    if page_count_log.shape[0] > 0:
+        streaks[pages] = calculate_longest_streak(page_count_log)
+    else:
+        streaks[pages] = 0, 'Not Active', 'N/A'
 
-st.set_page_config(page_title='Reading Tracker- Top Streaks')
 st.title('Top Streaks')
 for pages, days in streaks.items():
-    st.text(f'Days in a row (>{pages} pages): {days[0]} | {days[1]} | {days[2].strftime("%m/%d/%Y")}')
+    st.text(f'Days in a row (>{pages} pages): {days[0]} | {days[1]} | {days[2]}')
