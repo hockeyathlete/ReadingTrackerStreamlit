@@ -7,6 +7,8 @@ def load_data(user):
         sheet_id = '1lQQliuMCJPLcfn3CzaK4aU6-Ro3wkMJ1Ghqa8vdJ1ho'
     elif user == 'Michaels':
         sheet_id = '1P6fvMYKev5RS_M3ClTb-KiLPU-HOKplO-3grupqCdNI'
+    elif user == 'Jeff':
+        sheet_id = '1hJLYGq46kB_Z15HGLy_kCbyB4DLYu2esra_Gl_bFPOU'
     book_tracker = 'Book%20Tracker'
     book_tracker_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={book_tracker}'
     reading_log = 'Reading%20Log'

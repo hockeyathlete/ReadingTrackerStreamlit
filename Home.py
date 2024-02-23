@@ -7,7 +7,7 @@ st.title('Reading Tracker')
 st.text("Welcome to Alan's Reading Tracking App!")
 st.text('Use the menu to the left to navigate through the app')
 
-users = ['Alan', 'Michaels']
+users = ['Alan', 'Michaels', 'Jeff']
 selected_user = st.selectbox('View stats for:', users)
 
 
