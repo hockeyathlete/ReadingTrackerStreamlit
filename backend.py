@@ -27,6 +27,8 @@ def load_data(user):
     books['finish_date'] = pd.to_datetime(books['finish_date'])
     books.loc[~books['finish_date'].isnull(), 'finish_year'] = pd.to_datetime(books['finish_date']).dt.year
     books.loc[~books['finish_date'].isnull(), 'month_year'] = pd.to_datetime(books['finish_date']).dt.to_period('M').astype(str)
+    books['days_to_read'] = (books['finish_date']-books['start_date']).dt.days + 1
+    books['pages_per_day'] = (books['pages']/books['days_to_read']).round(0)
     books.loc[books['format'] == 'Book', 'pages_norm'] = books['pages']
     books.loc[books['format'] == 'eBook', 'pages_norm'] = round(books['pages'] * ebook_normalizer)
     books.loc[books['format'] == 'Audiobook', 'pages_norm'] = 0
