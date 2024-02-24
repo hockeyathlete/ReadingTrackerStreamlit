@@ -1,30 +1,34 @@
 import pandas as pd
+import psycopg2
 
 
 def load_data(user):
+    # connect to database
+    conn = psycopg2.connect(
+        "dbname='reading_tracker' user='postgres' password='postgres123' host='localhost' port='5432'")
+    books = pd.read_sql('SELECT * FROM books', conn)
     # Load Data
-    if user == 'Alan':
-        sheet_id = '1lQQliuMCJPLcfn3CzaK4aU6-Ro3wkMJ1Ghqa8vdJ1ho'
-    elif user == 'Michaels':
-        sheet_id = '1P6fvMYKev5RS_M3ClTb-KiLPU-HOKplO-3grupqCdNI'
-    elif user == 'Jeff':
-        sheet_id = '1hJLYGq46kB_Z15HGLy_kCbyB4DLYu2esra_Gl_bFPOU'
-    book_tracker = 'Book%20Tracker'
-    book_tracker_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={book_tracker}'
+    # if user == 'Alan':
+    sheet_id = '1lQQliuMCJPLcfn3CzaK4aU6-Ro3wkMJ1Ghqa8vdJ1ho'
+    # elif user == 'Michaels':
+    #     sheet_id = '1P6fvMYKev5RS_M3ClTb-KiLPU-HOKplO-3grupqCdNI'
+    # elif user == 'Jeff':
+    #     sheet_id = '1hJLYGq46kB_Z15HGLy_kCbyB4DLYu2esra_Gl_bFPOU'
+    # book_tracker = 'Book%20Tracker'
+    # book_tracker_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={book_tracker}'
     reading_log = 'Reading%20Log'
     reading_log_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={reading_log}'
-    books = pd.read_csv(book_tracker_url)
     log = pd.read_csv(reading_log_url)
     ebook_normalizer = 0.89
 
     # Preprocess Book Data
-    books['Start Date'] = pd.to_datetime(books['Start Date'])
-    books['Finish Date'] = pd.to_datetime(books['Finish Date'])
-    books.loc[~books['Finish Date'].isnull(), 'finish_year'] = pd.to_datetime(books['Finish Date']).dt.year
-    books.loc[~books['Finish Date'].isnull(), 'month_year'] = pd.to_datetime(books['Finish Date']).dt.to_period('M').astype(str)
-    books.loc[books['Format'] == 'Book', 'pages_norm'] = books['Pages']
-    books.loc[books['Format'] == 'eBook', 'pages_norm'] = round(books['Pages'] * ebook_normalizer)
-    books.loc[books['Format'] == 'Audiobook', 'pages_norm'] = 0
+    books['start_date'] = pd.to_datetime(books['start_date'])
+    books['finish_date'] = pd.to_datetime(books['finish_date'])
+    books.loc[~books['finish_date'].isnull(), 'finish_year'] = pd.to_datetime(books['finish_date']).dt.year
+    books.loc[~books['finish_date'].isnull(), 'month_year'] = pd.to_datetime(books['finish_date']).dt.to_period('M').astype(str)
+    books.loc[books['format'] == 'Book', 'pages_norm'] = books['pages']
+    books.loc[books['format'] == 'eBook', 'pages_norm'] = round(books['pages'] * ebook_normalizer)
+    books.loc[books['format'] == 'Audiobook', 'pages_norm'] = 0
 
     # Preprocess Log Data
     log['Date'] = pd.to_datetime(log['Date'])
