@@ -7,7 +7,7 @@ import numpy as np
 def books_by_year_chart(books_by_year_data):
     chart = alt.Chart(books_by_year_data, title='Books by Year').mark_bar().encode(
         x=alt.X('finish_year:O', title='Year'),
-        y=alt.Y('Book Title', title=None)
+        y=alt.Y('book_title', title=None)
     )
 
     return chart
@@ -16,7 +16,7 @@ def books_by_year_chart(books_by_year_data):
 def books_by_month_chart(books_by_month_data):
     chart = alt.Chart(books_by_month_data, title='Books by Month').mark_bar().encode(
         x=alt.X('month_year:O', title='Month'),
-        y=alt.Y('Book Title', title=None)
+        y=alt.Y('book_title', title=None)
     )
 
     return chart
@@ -29,10 +29,10 @@ min_pages_per_book = st.number_input('Pick number of pages to set as threshold',
 
 st.header('Yearly Overview')
 # filter by finished books (must meet minimum pages threshold to count)
-completed_books = st.session_state.book_data[(~st.session_state.book_data['Finish Date'].isnull()) & (st.session_state.book_data['Pages'] > min_pages_per_book)]
+completed_books = st.session_state.book_data[(~st.session_state.book_data['finish_date'].isnull()) & (st.session_state.book_data['pages'] > min_pages_per_book)]
 
 books_by_year = completed_books.groupby('finish_year')[
-    'Book Title'].count().sort_values(ascending=False).to_frame().reset_index()
+    'book_title'].count().sort_values(ascending=False).to_frame().reset_index()
 
 st.text('Number of books read each year')
 st.altair_chart(books_by_year_chart(books_by_year))
@@ -45,7 +45,7 @@ years = np.sort(completed_books['finish_year'].unique())
 year = st.selectbox('Pick a year to review', [int(year) for year in years][::-1])
 
 year_data = completed_books[completed_books['finish_year'] == year]
-books_by_month = year_data.groupby('month_year')['Book Title'].count().sort_values(
+books_by_month = year_data.groupby('month_year')['book_title'].count().sort_values(
     ascending=False).to_frame().reset_index()
 
 st.altair_chart(books_by_month_chart(books_by_month))
