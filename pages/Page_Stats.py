@@ -9,7 +9,7 @@ def pages_per_day_chart(pages_per_day_data):
     )
 
     chart = alt.hconcat(
-        base.encode(y='Pages Read').properties(title='Avg Pages/Day'),
+        base.encode(y='pages_read').properties(title='Avg Pages/Day'),
         base.encode(y=alt.Y('pages_norm', title='Pages Read')).properties(title='Avg Pages/Day (Normalized)')
     )
     # chart = base.encode(y='Pages Read')
@@ -23,7 +23,7 @@ def day_of_week_chart(day_of_week_data):
     )
 
     chart = alt.hconcat(
-        base.encode(y='Pages Read').properties(title='Avg Pages/Day'),
+        base.encode(y='pages_read').properties(title='Avg Pages/Day'),
         base.encode(y=alt.Y('pages_norm', title='Pages Read')).properties(title='Avg Pages/Day (Normalized)')
     )
     # chart = base.encode(y='Pages Read')
@@ -40,9 +40,9 @@ st.header('Pages per Day')
 years = np.sort(st.session_state.log_data['year'].unique())
 year = st.selectbox('Pick a year to review', [int(year) for year in years][::-1])
 
-pages_per_day = st.session_state.log_data[st.session_state.log_data['year'] == year].groupby('Date').agg(
-    {'Pages Read': 'sum', 'pages_norm': 'sum', 'month_year': 'first'}).groupby('month_year')[
-    ['Pages Read', 'pages_norm']] \
+pages_per_day = st.session_state.log_data[st.session_state.log_data['year'] == year].groupby('date').agg(
+    {'pages_read': 'sum', 'pages_norm': 'sum', 'month_year': 'first'}).groupby('month_year')[
+    ['pages_read', 'pages_norm']] \
     .mean().reset_index()
 
 st.altair_chart(pages_per_day_chart(pages_per_day))
@@ -50,8 +50,8 @@ st.altair_chart(pages_per_day_chart(pages_per_day))
 st.header('Days of the Week')
 
 
-day_of_week = st.session_state.log_data.groupby('Date').agg(
-    {'Pages Read': 'sum', 'pages_norm': 'sum', 'weekday': 'first'}).groupby('weekday')[['Pages Read', 'pages_norm']] \
+day_of_week = st.session_state.log_data.groupby('date').agg(
+    {'pages_read': 'sum', 'pages_norm': 'sum', 'weekday': 'first'}).groupby('weekday')[['pages_read', 'pages_norm']] \
     .mean().reset_index()
 
 st.altair_chart(day_of_week_chart(day_of_week))
