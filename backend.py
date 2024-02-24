@@ -38,9 +38,10 @@ def load_data(user):
     log['month_year'] = pd.to_datetime(log['date']).dt.to_period('M').astype(str)
     log['year'] = pd.DatetimeIndex(log['date']).year
     log['weekday'] = pd.DatetimeIndex(log['date']).strftime('%A')
-
-    # log.loc[log['format'] == 'Book', 'pages_norm'] = log['Pages Read']
-    # log.loc[log['format'] == 'eBook', 'pages_norm'] = round(log['Pages Read'] * ebook_normalizer)
-    # log.loc[log['format'] == 'Audiobook', 'pages_norm'] = 0
+    log['pages_read'] = log['end_page'] - log['start_page'] + 1
+    log = pd.merge(log, books[['book_title', 'format']], on='book_title', how='left')
+    log.loc[log['format'] == 'Book', 'pages_norm'] = log['pages_read']
+    log.loc[log['format'] == 'eBook', 'pages_norm'] = round(log['pages_read'] * ebook_normalizer)
+    log.loc[log['format'] == 'Audiobook', 'pages_norm'] = 0
 
     return books, log
