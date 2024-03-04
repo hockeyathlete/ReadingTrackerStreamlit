@@ -23,6 +23,8 @@ with st.expander('Click here to view the raw data'):
     st.header('Log Data')
     st.write(st.session_state.log_data)
 
+book_formats = ['Book', 'eBook', 'Audiobook']
+
 with st.expander('Add New Book Entry'):
     with st.form('New Book'):
         book_col_left, book_col_mid, book_col_right = st.columns(3)
@@ -44,8 +46,18 @@ with st.expander('Add New Book Entry'):
         with status_col_left:
             status = st.selectbox('Status*', ['Read', 'Currently Reading', 'DNF', 'To Read'])
         with status_col_right:
-            format = st.selectbox('Format*', ['Book', 'eBook', 'Audiobook'])
-        submitted = st.form_submit_button("Submit")
+            format = st.selectbox('Format*', book_formats)
+        book_submitted = st.form_submit_button("Submit")
+
 with st.expander('Add New Log Entry'):
-    st.header('New Log')
-    st.write('Log details')
+    with st.form('New Log Entry'):
+        date = st.date_input('Date*', value='today')
+        log_col_left, log_col_right = st.columns(2)
+        with log_col_left:
+            log_book = st.text_input('Book Title*')
+            start_page = st.number_input('Start Page*', min_value=1, step=1, format='%i')
+        with log_col_right:
+            log_format = st.selectbox('Format*', book_formats)
+            end_page = st.number_input('End Page', value=None, min_value=start_page+1, step=1, format='%i')
+        log_submitted = st.form_submit_button("Submit")
+
