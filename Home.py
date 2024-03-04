@@ -24,6 +24,7 @@ with st.expander('Click here to view the raw data'):
     st.write(st.session_state.log_data)
 
 book_formats = ['Book', 'eBook', 'Audiobook']
+current_books = st.session_state.book_data[st.session_state.book_data['status'] == 'Currently Reading']['book_title'].to_list()
 
 with st.expander('Add New Book Entry'):
     with st.form('New Book'):
@@ -54,7 +55,7 @@ with st.expander('Add New Log Entry'):
         date = st.date_input('Date*', value='today')
         log_col_left, log_col_right = st.columns(2)
         with log_col_left:
-            log_book = st.text_input('Book Title*')
+            log_book = st.selectbox('Book Title*', current_books)
             start_page = st.number_input('Start Page*', min_value=1, step=1, format='%i')
         with log_col_right:
             log_format = st.selectbox('Format*', book_formats)
