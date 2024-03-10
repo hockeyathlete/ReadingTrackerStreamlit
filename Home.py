@@ -9,7 +9,7 @@ def book_form(key, book_data=None):
                      'status': 'Currently Reading', 'pages': 1, 'series': None, 'series_ranking': None,
                      'genre': 'Fantasy', 'format': 'Book'}
 
-    form = st.form(key)
+    form = st.form(key, clear_on_submit=True)
 
     # Pandas doesn't use mixed int and NaN type columns, so have to convert the series ranking to int if it's NaN
     try:
@@ -28,7 +28,8 @@ def book_form(key, book_data=None):
     pages = book_col_right.number_input('Pages*', min_value=1, value=book_data['pages'], step=1, format='%i')
 
     series = book_col_left.text_input('Series', value=book_data['series'])
-    series_ranking = book_col_mid.number_input('Series Ranking', min_value=1, value=book_data['series_ranking'], step=1, format='%i')
+    series_ranking = book_col_mid.number_input('Series Ranking', min_value=1, value=book_data['series_ranking'], step=1,
+                                               format='%i')
     genre_index = genres.index(book_data['genre'])
     genre = book_col_right.selectbox('Genre', options=genres, index=genre_index)
 
@@ -36,10 +37,13 @@ def book_form(key, book_data=None):
     finish_date = book_col_mid.date_input('Finish Date', value=book_data['finish_date'])
     book_col_right.text_input('Reading Pace', placeholder='50 pages/day', disabled=True)
 
-    status = status_col_left.selectbox('Status*', ['Read', 'Currently Reading', 'DNF', 'To Read'])
+    status_index = reading_status.index(book_data['status'])
+    status = status_col_left.selectbox('Status*', options=reading_status, index=status_index)
     format = status_col_right.selectbox('Format*', book_formats)
 
     book_submitted = form.form_submit_button(key)
+    if book_submitted:
+        st.write('Submitted!')
     return form
 
 
@@ -47,7 +51,7 @@ def log_form(key, log_data=None, index=0):
     if not log_data:
         log_data = {'date': 'today', 'book_title': None, 'start_page': 1, 'end_page': None}
 
-    form = st.form(key)
+    form = st.form(key, clear_on_submit=True)
     date = form.date_input('Date*', value=log_data['date'])
     log_col_left, log_col_right = form.columns(2)
     log_book = log_col_left.selectbox('Book Title*', full_book_list_reversed, index=index)
@@ -57,6 +61,8 @@ def log_form(key, log_data=None, index=0):
     end_page = log_col_right.number_input('End Page', value=log_data['end_page'], min_value=start_page + 1, step=1,
                                           format='%i')
     log_submitted = form.form_submit_button(key)
+    if log_submitted:
+        st.write('Submitted!')
     return form
 
 
@@ -88,6 +94,7 @@ current_books = st.session_state.book_data[st.session_state.book_data['status'] 
 full_book_list_reversed = st.session_state.book_data['book_title'].iloc[::-1].to_list()
 ### NEED TO ADD MORE GENRES ###
 genres = ['Fantasy', 'Sci-fi', 'Crime']
+reading_status = ['Read', 'Currently Reading', 'DNF', 'To Read']
 
 with st.expander('Add New Book Entry'):
     book_form('Add Book')
@@ -105,7 +112,7 @@ with st.expander('Edit Log'):
     book_selected_index = full_book_list_reversed.index(book_selected)
     selected_logs = st.session_state.log_data[st.session_state.log_data['book_title'] == book_selected]
     selected_log = st.radio('Log', selected_logs['date'].dt.strftime('%m/%d/%Y'),
-                            captions=selected_logs['format'] + ': Page ' + selected_logs['start_page'].astype(str) + ' to ' +
-                                     selected_logs['end_page'].astype(str))
+                            captions=selected_logs['format'] + ': Page ' + selected_logs['start_page'].astype(
+                                str) + ' to ' + selected_logs['end_page'].astype(str))
     log_form('Edit Log Entry', selected_logs[(selected_logs['date'] == selected_log)].squeeze().to_dict(),
              index=book_selected_index)
